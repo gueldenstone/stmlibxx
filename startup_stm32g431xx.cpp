@@ -1,24 +1,25 @@
 /**
- * @file: startup.cpp
+ * @file: startup_stm32g431xx.cpp
  *
- * @date: 2020-05-03
+ * @date: 2020-06-22
  *
  * @author: Lukas Güldenstein
  *
- * @brief: Startup Code for the STM32F303xC
+ * @brief: Startup Code for STM32G431xx
  */
 
 /* -------------------------------- includes -------------------------------- */
 #include <algorithm>
 #include <cstdint>
 
-#include "stm32f303xc_it.hpp"
-#define DEFINE_DEFAULT_ISR(name)                                                                      \
-  extern "C" __attribute__((interrupt)) __attribute__((weak)) __attribute__((noreturn)) void name() { \
-    while (true)                                                                                      \
-      ;                                                                                               \
+#include "stm32g431xx_it.hpp"
+#define DEFINE_DEFAULT_ISR(name)                              \
+  extern "C" __attribute__((interrupt)) __attribute__((weak)) \
+      __attribute__((noreturn)) void                          \
+      name() {                                                \
+    while (true)                                              \
+      ;                                                       \
   }
-
 DEFINE_DEFAULT_ISR(defaultISR)
 DEFINE_DEFAULT_ISR(NMI_Handler)
 DEFINE_DEFAULT_ISR(HardFault_Handler)
@@ -30,14 +31,14 @@ DEFINE_DEFAULT_ISR(DebugMon_Handler)
 DEFINE_DEFAULT_ISR(PendSV_Handler)
 DEFINE_DEFAULT_ISR(SysTick_Handler)
 DEFINE_DEFAULT_ISR(WWDG_IRQHandler)
-DEFINE_DEFAULT_ISR(PVD_IRQHandler)
-DEFINE_DEFAULT_ISR(TAMP_STAMP_IRQHandler)
+DEFINE_DEFAULT_ISR(PVD_PVM_IRQHandler)
+DEFINE_DEFAULT_ISR(RTC_TAMP_LSECSS_IRQHandler)
 DEFINE_DEFAULT_ISR(RTC_WKUP_IRQHandler)
 DEFINE_DEFAULT_ISR(FLASH_IRQHandler)
 DEFINE_DEFAULT_ISR(RCC_IRQHandler)
 DEFINE_DEFAULT_ISR(EXTI0_IRQHandler)
 DEFINE_DEFAULT_ISR(EXTI1_IRQHandler)
-DEFINE_DEFAULT_ISR(EXTI2_TSC_IRQHandler)
+DEFINE_DEFAULT_ISR(EXTI2_IRQHandler)
 DEFINE_DEFAULT_ISR(EXTI3_IRQHandler)
 DEFINE_DEFAULT_ISR(EXTI4_IRQHandler)
 DEFINE_DEFAULT_ISR(DMA1_Channel1_IRQHandler)
@@ -46,12 +47,11 @@ DEFINE_DEFAULT_ISR(DMA1_Channel3_IRQHandler)
 DEFINE_DEFAULT_ISR(DMA1_Channel4_IRQHandler)
 DEFINE_DEFAULT_ISR(DMA1_Channel5_IRQHandler)
 DEFINE_DEFAULT_ISR(DMA1_Channel6_IRQHandler)
-DEFINE_DEFAULT_ISR(DMA1_Channel7_IRQHandler)
 DEFINE_DEFAULT_ISR(ADC1_2_IRQHandler)
-DEFINE_DEFAULT_ISR(USB_HP_CAN_TX_IRQHandler)
-DEFINE_DEFAULT_ISR(USB_LP_CAN_RX0_IRQHandler)
-DEFINE_DEFAULT_ISR(CAN_RX1_IRQHandler)
-DEFINE_DEFAULT_ISR(CAN_SCE_IRQHandler)
+DEFINE_DEFAULT_ISR(USB_HP_IRQHandler)
+DEFINE_DEFAULT_ISR(USB_LP_IRQHandler)
+DEFINE_DEFAULT_ISR(FDCAN1_IT0_IRQHandler)
+DEFINE_DEFAULT_ISR(FDCAN1_IT1_IRQHandler)
 DEFINE_DEFAULT_ISR(EXTI9_5_IRQHandler)
 DEFINE_DEFAULT_ISR(TIM1_BRK_TIM15_IRQHandler)
 DEFINE_DEFAULT_ISR(TIM1_UP_TIM16_IRQHandler)
@@ -76,10 +76,9 @@ DEFINE_DEFAULT_ISR(TIM8_BRK_IRQHandler)
 DEFINE_DEFAULT_ISR(TIM8_UP_IRQHandler)
 DEFINE_DEFAULT_ISR(TIM8_TRG_COM_IRQHandler)
 DEFINE_DEFAULT_ISR(TIM8_CC_IRQHandler)
-DEFINE_DEFAULT_ISR(ADC3_IRQHandler)
+DEFINE_DEFAULT_ISR(LPTIM1_IRQHandler)
 DEFINE_DEFAULT_ISR(SPI3_IRQHandler)
 DEFINE_DEFAULT_ISR(UART4_IRQHandler)
-DEFINE_DEFAULT_ISR(UART5_IRQHandler)
 DEFINE_DEFAULT_ISR(TIM6_DAC_IRQHandler)
 DEFINE_DEFAULT_ISR(TIM7_IRQHandler)
 DEFINE_DEFAULT_ISR(DMA2_Channel1_IRQHandler)
@@ -87,15 +86,20 @@ DEFINE_DEFAULT_ISR(DMA2_Channel2_IRQHandler)
 DEFINE_DEFAULT_ISR(DMA2_Channel3_IRQHandler)
 DEFINE_DEFAULT_ISR(DMA2_Channel4_IRQHandler)
 DEFINE_DEFAULT_ISR(DMA2_Channel5_IRQHandler)
-DEFINE_DEFAULT_ISR(ADC4_IRQHandler)
+DEFINE_DEFAULT_ISR(UCPD1_IRQHandler)
 DEFINE_DEFAULT_ISR(COMP1_2_3_IRQHandler)
-DEFINE_DEFAULT_ISR(COMP4_5_6_IRQHandler)
-DEFINE_DEFAULT_ISR(COMP7_IRQHandler)
-DEFINE_DEFAULT_ISR(USB_HP_IRQHandler)
-DEFINE_DEFAULT_ISR(USB_LP_IRQHandler)
-DEFINE_DEFAULT_ISR(USBWakeUp_RMP_IRQHandler)
+DEFINE_DEFAULT_ISR(COMP4_IRQHandler)
+DEFINE_DEFAULT_ISR(CRS_IRQHandler)
+DEFINE_DEFAULT_ISR(SAI1_IRQHandler)
 DEFINE_DEFAULT_ISR(FPU_IRQHandler)
-
+DEFINE_DEFAULT_ISR(RNG_IRQHandler)
+DEFINE_DEFAULT_ISR(LPUART1_IRQHandler)
+DEFINE_DEFAULT_ISR(I2C3_EV_IRQHandler)
+DEFINE_DEFAULT_ISR(I2C3_ER_IRQHandler)
+DEFINE_DEFAULT_ISR(DMAMUX_OVR_IRQHandler)
+DEFINE_DEFAULT_ISR(DMA2_Channel6_IRQHandler)
+DEFINE_DEFAULT_ISR(CORDIC_IRQHandler)
+DEFINE_DEFAULT_ISR(FMAC_IRQHandler)
 extern std::uint32_t _estack;
 extern "C" void Reset_Handler();
 
@@ -108,9 +112,9 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(NMI_Handler),
     /* NMI_Handler
      */
-    reinterpret_cast<std::uintptr_t>(HardFault_Handler),  /* HardFault_Handler */
-    reinterpret_cast<std::uintptr_t>(MemManage_Handler),  /* MemManage_Handler */
-    reinterpret_cast<std::uintptr_t>(BusFault_Handler),   /* BusFault_Handler */
+    reinterpret_cast<std::uintptr_t>(HardFault_Handler), /* HardFault_Handler */
+    reinterpret_cast<std::uintptr_t>(MemManage_Handler), /* MemManage_Handler */
+    reinterpret_cast<std::uintptr_t>(BusFault_Handler),  /* BusFault_Handler */
     reinterpret_cast<std::uintptr_t>(UsageFault_Handler), /* UsageFault_Handler
                                                            */
     reinterpret_cast<std::uintptr_t>(nullptr),            /* 0 */
@@ -126,15 +130,16 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     /* PendSV_Handler
      */
     reinterpret_cast<std::uintptr_t>(SysTick_Handler), /* SysTick_Handler */
+
     reinterpret_cast<std::uintptr_t>(Interrupt::WWDG_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::PVD_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::TAMP_STAMP_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::PVD_PVM_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::RTC_TAMP_LSECSS_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::RTC_WKUP_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::FLASH_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::RCC_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::EXTI0_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::EXTI1_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::EXTI2_TSC_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::EXTI2_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::EXTI3_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::EXTI4_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::DMA1_Channel1_IRQHandler),
@@ -143,12 +148,12 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(Interrupt::DMA1_Channel4_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::DMA1_Channel5_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::DMA1_Channel6_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::DMA1_Channel7_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(Interrupt::ADC1_2_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::USB_HP_CAN_TX_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::USB_LP_CAN_RX0_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::CAN_RX1_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::CAN_SCE_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::USB_HP_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::USB_LP_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::FDCAN1_IT0_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::FDCAN1_IT1_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::EXTI9_5_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::TIM1_BRK_TIM15_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::TIM1_UP_TIM16_IRQHandler),
@@ -173,13 +178,13 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(Interrupt::TIM8_UP_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::TIM8_TRG_COM_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::TIM8_CC_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::ADC3_IRQHandler),
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(Interrupt::LPTIM1_IRQHandler),
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(Interrupt::SPI3_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::UART4_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::UART5_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(Interrupt::TIM6_DAC_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::TIM7_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::DMA2_Channel1_IRQHandler),
@@ -187,12 +192,11 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(Interrupt::DMA2_Channel3_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::DMA2_Channel4_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::DMA2_Channel5_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::ADC4_IRQHandler),
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(Interrupt::UCPD1_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::COMP1_2_3_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::COMP4_5_6_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::COMP7_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::COMP4_IRQHandler),
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(nullptr),
@@ -200,15 +204,35 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(nullptr),
-    reinterpret_cast<std::uintptr_t>(Interrupt::USB_HP_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::USB_LP_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::USBWakeUp_RMP_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(Interrupt::CRS_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::SAI1_IRQHandler),
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(Interrupt::FPU_IRQHandler),
-};
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(Interrupt::RNG_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::LPUART1_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::I2C3_EV_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::I2C3_ER_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::DMAMUX_OVR_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(Interrupt::DMA2_Channel6_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(Interrupt::CORDIC_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(Interrupt::FMAC_IRQHandler)};
 
 extern "C" void Reset_Handler() {
   // Initialize data section

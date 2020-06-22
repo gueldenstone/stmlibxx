@@ -1,17 +1,17 @@
 /**
- * @file: stm32f303xe_it.hpp
+ * @file: stm32g484xx_it.hpp
  *
- * @date: 2020-05-02
+ * @date: 2020-06-22
  *
  * @author: Lukas Güldenstein
  */
 
-#ifndef _ISR_HPP
-#define _ISR_HPP
+#ifndef _STM32G484XX_IT_HPP
+#define _STM32G484XX_IT_HPP
 
-#define MAX_INTERRUPTS 98  // 97 + "0" 
-#include "stm32f3xx.h"
-
+/* -------------------------------- includes -------------------------------- */
+#define MAX_INTERRUPTS 118
+#include "stm32g4xx.h"
 class Interrupt {
  public:
   // Constructor
@@ -20,14 +20,14 @@ class Interrupt {
   static void Register(IRQn_Type interrupt_number, Interrupt* intThisPtr);
   // ISR functions
   static void __attribute__((weak)) WWDG_IRQHandler(void);
-  static void __attribute__((weak)) PVD_IRQHandler(void);
-  static void __attribute__((weak)) TAMP_STAMP_IRQHandler(void);
+  static void __attribute__((weak)) PVD_PVM_IRQHandler(void);
+  static void __attribute__((weak)) RTC_TAMP_LSECSS_IRQHandler(void);
   static void __attribute__((weak)) RTC_WKUP_IRQHandler(void);
   static void __attribute__((weak)) FLASH_IRQHandler(void);
   static void __attribute__((weak)) RCC_IRQHandler(void);
   static void __attribute__((weak)) EXTI0_IRQHandler(void);
   static void __attribute__((weak)) EXTI1_IRQHandler(void);
-  static void __attribute__((weak)) EXTI2_TSC_IRQHandler(void);
+  static void __attribute__((weak)) EXTI2_IRQHandler(void);
   static void __attribute__((weak)) EXTI3_IRQHandler(void);
   static void __attribute__((weak)) EXTI4_IRQHandler(void);
   static void __attribute__((weak)) DMA1_Channel1_IRQHandler(void);
@@ -38,10 +38,10 @@ class Interrupt {
   static void __attribute__((weak)) DMA1_Channel6_IRQHandler(void);
   static void __attribute__((weak)) DMA1_Channel7_IRQHandler(void);
   static void __attribute__((weak)) ADC1_2_IRQHandler(void);
-  static void __attribute__((weak)) USB_HP_CAN_TX_IRQHandler(void);
-  static void __attribute__((weak)) USB_LP_CAN_RX0_IRQHandler(void);
-  static void __attribute__((weak)) CAN_RX1_IRQHandler(void);
-  static void __attribute__((weak)) CAN_SCE_IRQHandler(void);
+  static void __attribute__((weak)) USB_HP_IRQHandler(void);
+  static void __attribute__((weak)) USB_LP_IRQHandler(void);
+  static void __attribute__((weak)) FDCAN1_IT0_IRQHandler(void);
+  static void __attribute__((weak)) FDCAN1_IT1_IRQHandler(void);
   static void __attribute__((weak)) EXTI9_5_IRQHandler(void);
   static void __attribute__((weak)) TIM1_BRK_TIM15_IRQHandler(void);
   static void __attribute__((weak)) TIM1_UP_TIM16_IRQHandler(void);
@@ -67,28 +67,64 @@ class Interrupt {
   static void __attribute__((weak)) TIM8_TRG_COM_IRQHandler(void);
   static void __attribute__((weak)) TIM8_CC_IRQHandler(void);
   static void __attribute__((weak)) ADC3_IRQHandler(void);
+  static void __attribute__((weak)) FMC_IRQHandler(void);
+  static void __attribute__((weak)) LPTIM1_IRQHandler(void);
+  static void __attribute__((weak)) TIM5_IRQHandler(void);
   static void __attribute__((weak)) SPI3_IRQHandler(void);
   static void __attribute__((weak)) UART4_IRQHandler(void);
   static void __attribute__((weak)) UART5_IRQHandler(void);
   static void __attribute__((weak)) TIM6_DAC_IRQHandler(void);
-  static void __attribute__((weak)) TIM7_IRQHandler(void);
+  static void __attribute__((weak)) TIM7_DAC_IRQHandler(void);
   static void __attribute__((weak)) DMA2_Channel1_IRQHandler(void);
   static void __attribute__((weak)) DMA2_Channel2_IRQHandler(void);
   static void __attribute__((weak)) DMA2_Channel3_IRQHandler(void);
   static void __attribute__((weak)) DMA2_Channel4_IRQHandler(void);
   static void __attribute__((weak)) DMA2_Channel5_IRQHandler(void);
   static void __attribute__((weak)) ADC4_IRQHandler(void);
+  static void __attribute__((weak)) ADC5_IRQHandler(void);
+  static void __attribute__((weak)) UCPD1_IRQHandler(void);
   static void __attribute__((weak)) COMP1_2_3_IRQHandler(void);
   static void __attribute__((weak)) COMP4_5_6_IRQHandler(void);
   static void __attribute__((weak)) COMP7_IRQHandler(void);
-  static void __attribute__((weak)) USB_HP_IRQHandler(void);
-  static void __attribute__((weak)) USB_LP_IRQHandler(void);
-  static void __attribute__((weak)) USBWakeUp_RMP_IRQHandler(void);
+  static void __attribute__((weak)) HRTIM1_Master_IRQHandler(void);
+  static void __attribute__((weak)) HRTIM1_TIMA_IRQHandler(void);
+  static void __attribute__((weak)) HRTIM1_TIMB_IRQHandler(void);
+  static void __attribute__((weak)) HRTIM1_TIMC_IRQHandler(void);
+  static void __attribute__((weak)) HRTIM1_TIMD_IRQHandler(void);
+  static void __attribute__((weak)) HRTIM1_TIME_IRQHandler(void);
+  static void __attribute__((weak)) HRTIM1_FLT_IRQHandler(void);
+  static void __attribute__((weak)) HRTIM1_TIMF_IRQHandler(void);
+  static void __attribute__((weak)) CRS_IRQHandler(void);
+  static void __attribute__((weak)) SAI1_IRQHandler(void);
+  static void __attribute__((weak)) TIM20_BRK_IRQHandler(void);
+  static void __attribute__((weak)) TIM20_UP_IRQHandler(void);
+  static void __attribute__((weak)) TIM20_TRG_COM_IRQHandler(void);
+  static void __attribute__((weak)) TIM20_CC_IRQHandler(void);
   static void __attribute__((weak)) FPU_IRQHandler(void);
+  static void __attribute__((weak)) I2C4_EV_IRQHandler(void);
+  static void __attribute__((weak)) I2C4_ER_IRQHandler(void);
+  static void __attribute__((weak)) SPI4_IRQHandler(void);
+  static void __attribute__((weak)) FDCAN2_IT0_IRQHandler(void);
+  static void __attribute__((weak)) FDCAN2_IT1_IRQHandler(void);
+  static void __attribute__((weak)) FDCAN3_IT0_IRQHandler(void);
+  static void __attribute__((weak)) FDCAN3_IT1_IRQHandler(void);
+  static void __attribute__((weak)) RNG_IRQHandler(void);
+  static void __attribute__((weak)) LPUART1_IRQHandler(void);
+  static void __attribute__((weak)) I2C3_EV_IRQHandler(void);
+  static void __attribute__((weak)) I2C3_ER_IRQHandler(void);
+  static void __attribute__((weak)) DMAMUX_OVR_IRQHandler(void);
+  static void __attribute__((weak)) QUADSPI_IRQHandler(void);
+  static void __attribute__((weak)) DMA1_Channel8_IRQHandler(void);
+  static void __attribute__((weak)) DMA2_Channel6_IRQHandler(void);
+  static void __attribute__((weak)) DMA2_Channel7_IRQHandler(void);
+  static void __attribute__((weak)) DMA2_Channel8_IRQHandler(void);
+  static void __attribute__((weak)) CORDIC_IRQHandler(void);
+  static void __attribute__((weak)) FMAC_IRQHandler(void);
 
   virtual void ISR(void) = 0;
 
  private:
   static Interrupt* ISRVectorTable[MAX_INTERRUPTS - NVIC_USER_IRQ_OFFSET];
 };
-#endif /* _ISR_HPP */
+
+#endif /* _STM32G484XX_IT_HPP */

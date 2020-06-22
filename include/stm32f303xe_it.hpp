@@ -9,15 +9,8 @@
 #ifndef _ISR_HPP
 #define _ISR_HPP
 
-#ifdef STM32F303xE
 #define MAX_INTERRUPTS 101  // 100 with 0
 #include "stm32f3xx.h"
-#endif
-
-#ifdef STM32F303xC
-#define MAX_INTERRUPTS 101  // 100 with 0
-#include "stm32f3xx.h"
-#endif
 
 class Interrupt {
  public:

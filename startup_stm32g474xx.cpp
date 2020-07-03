@@ -13,12 +13,10 @@
 #include <cstdint>
 
 #include "stm32g474xx_it.hpp"
-#define DEFINE_DEFAULT_ISR(name)                              \
-  extern "C" __attribute__((interrupt)) __attribute__((weak)) \
-      __attribute__((noreturn)) void                          \
-      name() {                                                \
-    while (true)                                              \
-      ;                                                       \
+#define DEFINE_DEFAULT_ISR(name)                                                                      \
+  extern "C" __attribute__((interrupt)) __attribute__((weak)) __attribute__((noreturn)) void name() { \
+    while (true)                                                                                      \
+      ;                                                                                               \
   }
 DEFINE_DEFAULT_ISR(defaultISR)
 DEFINE_DEFAULT_ISR(NMI_Handler)
@@ -143,9 +141,9 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(NMI_Handler),
     /* NMI_Handler
      */
-    reinterpret_cast<std::uintptr_t>(HardFault_Handler), /* HardFault_Handler */
-    reinterpret_cast<std::uintptr_t>(MemManage_Handler), /* MemManage_Handler */
-    reinterpret_cast<std::uintptr_t>(BusFault_Handler),  /* BusFault_Handler */
+    reinterpret_cast<std::uintptr_t>(HardFault_Handler),  /* HardFault_Handler */
+    reinterpret_cast<std::uintptr_t>(MemManage_Handler),  /* MemManage_Handler */
+    reinterpret_cast<std::uintptr_t>(BusFault_Handler),   /* BusFault_Handler */
     reinterpret_cast<std::uintptr_t>(UsageFault_Handler), /* UsageFault_Handler
                                                            */
     reinterpret_cast<std::uintptr_t>(nullptr),            /* 0 */
@@ -246,8 +244,7 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(Interrupt::FPU_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::I2C4_EV_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::I2C4_ER_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt::SPI4_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(nullptr),
+    reinterpret_cast<std::uintptr_t>(Interrupt::SPI4_IRQHandler), reinterpret_cast<std::uintptr_t>(nullptr),
     reinterpret_cast<std::uintptr_t>(Interrupt::FDCAN2_IT0_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::FDCAN2_IT1_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::FDCAN3_IT0_IRQHandler),
@@ -270,7 +267,7 @@ extern "C" void Reset_Handler() {
   extern std::uint8_t _sdata;
   extern std::uint8_t _edata;
   extern std::uint8_t _etext;
-  std::size_t size = st ^ tic_cast<size_t>(&_edata - &_sdata);
+  std::size_t size = static_cast<size_t>(&_edata - &_sdata);
   std::copy(&_etext, &_etext + size, &_sdata);
 
   // Initialize bss section

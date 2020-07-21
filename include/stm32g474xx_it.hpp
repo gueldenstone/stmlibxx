@@ -129,4 +129,19 @@ class Interrupt {
   static Interrupt* ISRVectorTable[MAX_INTERRUPTS - NVIC_USER_IRQ_OFFSET];
 };
 
+#if 0
+template <class owner_t>
+class InterruptHandlerClass : public Interrupt {
+ public:
+  InterruptHandlerClass(owner_t* owner, IRQn_Type intnmbr) {
+    InterruptOwnerPtr = owner;
+    Interrupt::Register(intnmbr, this);
+  }
+  virtual ~InterruptHandlerClass() {}
+  virtual void ISR(void) override final;
+
+ private:
+  owner_t* InterruptOwnerPtr;
+};
+#endif
 #endif /* _STM32G474XX_IT_HPP */

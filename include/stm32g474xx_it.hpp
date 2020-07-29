@@ -17,7 +17,7 @@ class Interrupt {
   // Constructor
   Interrupt(){};
   // Register function
-  void Register(IRQn_Type interrupt_number, Interrupt* intThisPtr) {
+  void Register(const IRQn_Type& interrupt_number, Interrupt* intThisPtr) {
     ISRVectorTable[interrupt_number] = intThisPtr;
   }
   // ISR functions

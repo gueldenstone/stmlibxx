@@ -46,7 +46,11 @@ typedef enum GPIO_AlternateFunction {
 
 class GPIO {
  public:
-  GPIO() = default;
+  GPIO() {
+    while (1) {
+      __NOP();
+    }
+  }
   GPIO(GPIO_TypeDef* bank) : gpio(bank) {
     if (bank == GPIOA) {
       RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
@@ -77,6 +81,10 @@ class GPIO {
                       const GPIO_AlternateFunction_Type& af);
   void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode,
                       const GPIO_AlternateFunction_Type& af);
+  void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode);
+  void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype);
+
+ private:
   void set_pin_mode(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode);
   void set_pin_type(const GPIO_Pin_Type& pin_num, const GPIO_OutputType& otype);
   void set_pin_speed(const GPIO_Pin_Type& pin_num, const GPIO_Speed& ospeed);

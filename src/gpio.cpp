@@ -23,12 +23,12 @@ GPIO_State_Type GPIO::read_pin(const GPIO_Pin_Type& pin_num) {
 
 void GPIO::pin_on(const GPIO_Pin_Type& pin_num) {
   // setting 1 pin to on state
-  gpio->BSRR |= 0b1 << (15 + pin_num);
+  gpio->BSRR |= 0b1 << pin_num;
 }
 
 void GPIO::pin_off(const GPIO_Pin_Type& pin_num) {
   // setting 1 pin to off state
-  gpio->BSRR |= 0b1 << pin_num;
+  gpio->BSRR |= 0b1 << (16 + pin_num);
 }
 
 void GPIO::set_pin_mode(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode) {
@@ -80,4 +80,11 @@ void GPIO::set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode,
                           const GPIO_AlternateFunction_Type& af) {
   GPIO::set_pin_mode(pin_num, mode);
   GPIO::set_pin_af(pin_num, af);
+}
+void GPIO::set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype) {
+  GPIO::set_pin_mode(pin_num, mode);
+  GPIO::set_pin_type(pin_num, otype);
+}
+void GPIO::set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode) {
+  GPIO::set_pin_mode(pin_num, mode);
 }

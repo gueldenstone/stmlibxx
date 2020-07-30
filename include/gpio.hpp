@@ -13,6 +13,7 @@
 #ifdef STM32G474xx
 #include "stm32g474xx.h"
 #endif
+#include <vector>
 
 enum GPIO_Pin { P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15 };
 enum GPIO_Mode { Input = 0b00, Output = 0b01, Alternate = 0b10, Analog = 11 };
@@ -38,6 +39,8 @@ enum GPIO_AlternateFunction {
   AF14 = 0b1110,
   AF15 = 0b1111
 };
+
+//  variadic template struct for configurations
 
 class GPIO {
  public:
@@ -93,5 +96,28 @@ class GPIO {
 extern GPIO GPIO_A;
 extern GPIO GPIO_B;
 extern GPIO GPIO_C;
+
+struct GPIO_Pin_Config {
+  GPIO_Pin_Config() = default;
+  GPIO_Pin_Config(GPIO& bank, const std::vector<GPIO_Pin>& pin_nums)
+      : m_bank(bank), m_pin_nums(pin_nums) {}
+
+  GPIO_Mode m_mode = Analog;
+  GPIO_OutputType m_otype = PushPull;
+  GPIO_Speed m_ospeed = LowSpeed;
+  GPIO_PullUpDown m_pupd = noPUPD;
+  GPIO_AlternateFunction m_af = AF0;
+
+ private:
+  GPIO& m_bank = GPIO_A;
+  std::vector<GPIO_Pin> m_pin_nums;
+
+ public:
+  void configure(void) {
+    for (auto&& pin : m_pin_nums) {
+      m_bank.set_pin_config(pin, m_mode, m_otype, m_ospeed, m_pupd, m_af);
+    }
+  }
+};
 
 #endif /* _GPIO_HPP */

@@ -70,34 +70,6 @@ class GPIO {
   void pin_on(const GPIO_Pin& pin_num);
   void pin_off(const GPIO_Pin& pin_num);
 
-  //  public:
-  //   void set_pin_config(const GPIO_Pin& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype,
-  //                       const GPIO_Speed& ospeed, const GPIO_PullUpDown& pupd,
-  //                       const GPIO_AlternateFunction& af) {
-  //     set_pin_mode(pin_num, mode);
-  //     set_pin_type(pin_num, otype);
-  //     set_pin_speed(pin_num, ospeed);
-  //     set_pin_pupd(pin_num, pupd);
-  //     set_pin_af(pin_num, af);
-  //   }
-
-  //   void set_pin_config(const GPIO_Pin& pin_num, const GPIO_Mode& mode, const GPIO_AlternateFunction& af) {
-  //     set_pin_mode(pin_num, mode);
-  //     set_pin_af(pin_num, af);
-  //   }
-  //   void set_pin_config(const GPIO_Pin& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype) {
-  //     set_pin_mode(pin_num, mode);
-  //     set_pin_type(pin_num, otype);
-  //   }
-  //   void set_pin_config(const GPIO_Pin& pin_num, const GPIO_Mode& mode) { set_pin_mode(pin_num, mode); }
-
-  //  private:
-  //   void set_pin_mode(const GPIO_Pin& pin_num, const GPIO_Mode& mode);
-  //   void set_pin_type(const GPIO_Pin& pin_num, const GPIO_OutputType& otype);
-  //   void set_pin_speed(const GPIO_Pin& pin_num, const GPIO_Speed& ospeed);
-  //   void set_pin_pupd(const GPIO_Pin& pin_num, const GPIO_PullUpDown& pupd);
-  //   void set_pin_af(const GPIO_Pin& pin_num, const GPIO_AlternateFunction& af);
-
  private:
   void pin_config_impl(const GPIO_Pin& pin_num, const GPIO_Mode& mode);
   void pin_config_impl(const GPIO_Pin& pin_num, const GPIO_OutputType& otype);
@@ -115,8 +87,6 @@ class GPIO {
 
  protected:
   GPIO_TypeDef* gpio = nullptr;
-
- private:
 };
 
 // declare GPIO Banks

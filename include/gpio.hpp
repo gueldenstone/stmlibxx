@@ -78,11 +78,24 @@ class GPIO {
  public:
   void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype,
                       const GPIO_Speed& ospeed, const GPIO_PullUpDown_Type& pupd,
-                      const GPIO_AlternateFunction_Type& af);
+                      const GPIO_AlternateFunction_Type& af) {
+    set_pin_mode(pin_num, mode);
+    set_pin_type(pin_num, otype);
+    set_pin_speed(pin_num, ospeed);
+    set_pin_pupd(pin_num, pupd);
+    set_pin_af(pin_num, af);
+  }
+
   void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode,
-                      const GPIO_AlternateFunction_Type& af);
-  void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode);
-  void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype);
+                      const GPIO_AlternateFunction_Type& af) {
+    set_pin_mode(pin_num, mode);
+    set_pin_af(pin_num, af);
+  }
+  void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype) {
+    set_pin_mode(pin_num, mode);
+    set_pin_type(pin_num, otype);
+  }
+  void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode) { set_pin_mode(pin_num, mode); }
 
  private:
   void set_pin_mode(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode);

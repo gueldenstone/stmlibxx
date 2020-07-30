@@ -1,11 +1,11 @@
 /**
- * @file: gpio.cpp
+ * @file: gpio_stm32g474xx.cpp
  *
- * @date: 2020-07-29
+ * @date: 2020-07-30
  *
  * @author: Lukas Güldenstein
  *
- * @brief: simple GPIO Driver for STM32G474xx
+ * @brief: Implementation of GPIO driver functions
  */
 
 /* -------------------------------- includes -------------------------------- */
@@ -64,27 +64,4 @@ void GPIO::set_pin_af(const GPIO_Pin_Type& pin_num, const GPIO_AlternateFunction
     gpio->AFR[1] &= ~(0b1111 << offset2);  // reset to 0
     gpio->AFR[1] |= af << offset2;
   }
-}
-
-void GPIO::set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype,
-                          const GPIO_Speed& ospeed, const GPIO_PullUpDown_Type& pupd,
-                          const GPIO_AlternateFunction_Type& af) {
-  GPIO::set_pin_mode(pin_num, mode);
-  GPIO::set_pin_type(pin_num, otype);
-  GPIO::set_pin_speed(pin_num, ospeed);
-  GPIO::set_pin_pupd(pin_num, pupd);
-  GPIO::set_pin_af(pin_num, af);
-}
-
-void GPIO::set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode,
-                          const GPIO_AlternateFunction_Type& af) {
-  GPIO::set_pin_mode(pin_num, mode);
-  GPIO::set_pin_af(pin_num, af);
-}
-void GPIO::set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype) {
-  GPIO::set_pin_mode(pin_num, mode);
-  GPIO::set_pin_type(pin_num, otype);
-}
-void GPIO::set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode) {
-  GPIO::set_pin_mode(pin_num, mode);
 }

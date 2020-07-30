@@ -14,18 +14,13 @@
 #include "stm32g474xx.h"
 #endif
 
-typedef enum GPIO_Pin { P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15 } GPIO_Pin_Type;
-typedef enum GPIO_Mode { Input = 0b00, Output = 0b01, Alternate = 0b10, Analog = 11 } GPIO_Mode_Type;
-typedef enum GPIO_OutputType { PushPull = 0b0, OpenDrain = 0b1 } GPIO_OutputType_Type;
-typedef enum GPIO_Speed {
-  LowSpeed = 0b00,
-  MediumSpeed = 0b01,
-  HighSpeed = 0b10,
-  VeryHighSpeed = 0b11
-} GPIO_Speed_Type;
-typedef enum GPIO_PullUpDown { noPUPD = 0b00, PullUp = 0b01, PullDown = 0b10 } GPIO_PullUpDown_Type;
-typedef enum GPIO_State { Off = 0, On = 1 } GPIO_State_Type;
-typedef enum GPIO_AlternateFunction {
+enum GPIO_Pin { P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15 };
+enum GPIO_Mode { Input = 0b00, Output = 0b01, Alternate = 0b10, Analog = 11 };
+enum GPIO_OutputType { PushPull = 0b0, OpenDrain = 0b1 };
+enum GPIO_Speed { LowSpeed = 0b00, MediumSpeed = 0b01, HighSpeed = 0b10, VeryHighSpeed = 0b11 };
+enum GPIO_PullUpDown { noPUPD = 0b00, PullUp = 0b01, PullDown = 0b10 };
+enum GPIO_State { Off = 0, On = 1 };
+enum GPIO_AlternateFunction {
   AF0 = 0b0000,
   AF1 = 0b0001,
   AF2 = 0b0010,
@@ -42,7 +37,7 @@ typedef enum GPIO_AlternateFunction {
   AF13 = 0b1101,
   AF14 = 0b1110,
   AF15 = 0b1111
-} GPIO_AlternateFunction_Type;
+};
 
 class GPIO {
  public:
@@ -71,38 +66,52 @@ class GPIO {
   ~GPIO() = default;
 
  public:
-  GPIO_State_Type read_pin(const GPIO_Pin_Type& pin_num);
-  void pin_on(const GPIO_Pin_Type& pin_num);
-  void pin_off(const GPIO_Pin_Type& pin_num);
+  GPIO_State read_pin(const GPIO_Pin& pin_num);
+  void pin_on(const GPIO_Pin& pin_num);
+  void pin_off(const GPIO_Pin& pin_num);
 
- public:
-  void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype,
-                      const GPIO_Speed& ospeed, const GPIO_PullUpDown_Type& pupd,
-                      const GPIO_AlternateFunction_Type& af) {
-    set_pin_mode(pin_num, mode);
-    set_pin_type(pin_num, otype);
-    set_pin_speed(pin_num, ospeed);
-    set_pin_pupd(pin_num, pupd);
-    set_pin_af(pin_num, af);
-  }
+  //  public:
+  //   void set_pin_config(const GPIO_Pin& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype,
+  //                       const GPIO_Speed& ospeed, const GPIO_PullUpDown& pupd,
+  //                       const GPIO_AlternateFunction& af) {
+  //     set_pin_mode(pin_num, mode);
+  //     set_pin_type(pin_num, otype);
+  //     set_pin_speed(pin_num, ospeed);
+  //     set_pin_pupd(pin_num, pupd);
+  //     set_pin_af(pin_num, af);
+  //   }
 
-  void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode,
-                      const GPIO_AlternateFunction_Type& af) {
-    set_pin_mode(pin_num, mode);
-    set_pin_af(pin_num, af);
-  }
-  void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype) {
-    set_pin_mode(pin_num, mode);
-    set_pin_type(pin_num, otype);
-  }
-  void set_pin_config(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode) { set_pin_mode(pin_num, mode); }
+  //   void set_pin_config(const GPIO_Pin& pin_num, const GPIO_Mode& mode, const GPIO_AlternateFunction& af) {
+  //     set_pin_mode(pin_num, mode);
+  //     set_pin_af(pin_num, af);
+  //   }
+  //   void set_pin_config(const GPIO_Pin& pin_num, const GPIO_Mode& mode, const GPIO_OutputType& otype) {
+  //     set_pin_mode(pin_num, mode);
+  //     set_pin_type(pin_num, otype);
+  //   }
+  //   void set_pin_config(const GPIO_Pin& pin_num, const GPIO_Mode& mode) { set_pin_mode(pin_num, mode); }
+
+  //  private:
+  //   void set_pin_mode(const GPIO_Pin& pin_num, const GPIO_Mode& mode);
+  //   void set_pin_type(const GPIO_Pin& pin_num, const GPIO_OutputType& otype);
+  //   void set_pin_speed(const GPIO_Pin& pin_num, const GPIO_Speed& ospeed);
+  //   void set_pin_pupd(const GPIO_Pin& pin_num, const GPIO_PullUpDown& pupd);
+  //   void set_pin_af(const GPIO_Pin& pin_num, const GPIO_AlternateFunction& af);
 
  private:
-  void set_pin_mode(const GPIO_Pin_Type& pin_num, const GPIO_Mode& mode);
-  void set_pin_type(const GPIO_Pin_Type& pin_num, const GPIO_OutputType& otype);
-  void set_pin_speed(const GPIO_Pin_Type& pin_num, const GPIO_Speed& ospeed);
-  void set_pin_pupd(const GPIO_Pin_Type& pin_num, const GPIO_PullUpDown_Type& pupd);
-  void set_pin_af(const GPIO_Pin_Type& pin_num, const GPIO_AlternateFunction_Type& af);
+  void pin_config_impl(const GPIO_Pin& pin_num, const GPIO_Mode& mode);
+  void pin_config_impl(const GPIO_Pin& pin_num, const GPIO_OutputType& otype);
+  void pin_config_impl(const GPIO_Pin& pin_num, const GPIO_Speed& ospeed);
+  void pin_config_impl(const GPIO_Pin& pin_num, const GPIO_PullUpDown& pupd);
+  void pin_config_impl(const GPIO_Pin& pin_num, const GPIO_AlternateFunction& af);
+
+ public:
+  //  variadic template function which iterates over all given configs
+  template <typename... Configs>
+  void set_pin_config(const GPIO_Pin& pin_num, const Configs&... configs) {
+    auto call = [&](auto&& config) { pin_config_impl(pin_num, config); };
+    (call(configs), ...);
+  }
 
  protected:
   GPIO_TypeDef* gpio = nullptr;

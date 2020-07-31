@@ -40,8 +40,6 @@ enum GPIO_AlternateFunction {
   AF15 = 0b1111
 };
 
-//  variadic template struct for configurations
-
 class GPIO {
  public:
   GPIO() {
@@ -99,14 +97,14 @@ extern GPIO GPIO_C;
 
 struct GPIO_Pin_Config {
   GPIO_Pin_Config() = default;
-  GPIO_Pin_Config(GPIO& bank, const std::vector<GPIO_Pin>& pin_nums)
-      : m_bank(bank), m_pin_nums(pin_nums) {}
+  GPIO_Pin_Config(GPIO& bank, const std::vector<GPIO_Pin>& pin_nums) : m_bank(bank), m_pin_nums(pin_nums) {}
+  GPIO_Pin_Config(const std::vector<GPIO_Pin>& pin_nums) : m_pin_nums(pin_nums) {}
 
-  GPIO_Mode m_mode = Analog;
-  GPIO_OutputType m_otype = PushPull;
-  GPIO_Speed m_ospeed = LowSpeed;
-  GPIO_PullUpDown m_pupd = noPUPD;
-  GPIO_AlternateFunction m_af = AF0;
+  GPIO_Mode Mode = Analog;
+  GPIO_OutputType OutputType = PushPull;
+  GPIO_Speed OutputSpeed = LowSpeed;
+  GPIO_PullUpDown PullUpPullDown = noPUPD;
+  GPIO_AlternateFunction AlternateFunction = AF0;
 
  private:
   GPIO& m_bank = GPIO_A;
@@ -115,8 +113,13 @@ struct GPIO_Pin_Config {
  public:
   void configure(void) {
     for (auto&& pin : m_pin_nums) {
-      m_bank.set_pin_config(pin, m_mode, m_otype, m_ospeed, m_pupd, m_af);
+      m_bank.set_pin_config(pin, Mode, OutputType, OutputSpeed, PullUpPullDown, AlternateFunction);
     }
+  }
+  void configure_bank(GPIO& bank, const std::vector<GPIO_Pin>& pin_nums) {
+    m_pin_nums = pin_nums;
+    m_bank = bank;
+    configure();
   }
 };
 

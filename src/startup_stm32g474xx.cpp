@@ -262,6 +262,8 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(Interrupt::CORDIC_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt::FMAC_IRQHandler)};
 
+Interrupt *Interrupt::ISRVectorTable[];
+
 extern "C" void Reset_Handler() {
   // Initialize data section
   extern std::uint8_t _sdata;

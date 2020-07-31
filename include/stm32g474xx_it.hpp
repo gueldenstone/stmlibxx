@@ -12,12 +12,12 @@
 /* -------------------------------- includes -------------------------------- */
 #define MAX_INTERRUPTS 118
 #include "stm32g4xx.h"
-class Interrupt {
+class Interrupt_Base {
  public:
   // Constructor
-  Interrupt(){};
+  Interrupt_Base(){};
   // Register function
-  void Register(const IRQn_Type& interrupt_number, Interrupt* intThisPtr) {
+  void Register(const IRQn_Type& interrupt_number, Interrupt_Base* intThisPtr) {
     ISRVectorTable[interrupt_number] = intThisPtr;
   }
   // ISR functions
@@ -126,23 +126,19 @@ class Interrupt {
   virtual void ISR(void) = 0;
 
  private:
-  static Interrupt* ISRVectorTable[MAX_INTERRUPTS - NVIC_USER_IRQ_OFFSET];
+  static Interrupt_Base* ISRVectorTable[MAX_INTERRUPTS - NVIC_USER_IRQ_OFFSET];
 };
 
 #if 1
-template <class owner_t>
-class InterruptHandlerClass : public Interrupt {
+template <class owner_t, IRQn_Type intnmbr>
+class Interrupt : public Interrupt_Base {
  public:
-  InterruptHandlerClass() {}
-  InterruptHandlerClass(owner_t* owner, IRQn_Type intnmbr) {
-    InterruptOwnerPtr = owner;
-    Interrupt::Register(intnmbr, this);
-  }
-  virtual ~InterruptHandlerClass() {}
-  virtual void ISR(void);
+  Interrupt() { Interrupt::Register(intnmbr, this); }
+  virtual ~Interrupt() {}
+  virtual void ISR(void) override final { Owner.IRQHandler(); }
 
  private:
-  owner_t* InterruptOwnerPtr;
+  owner_t& Owner = static_cast<owner_t&>(*this);
 };
 #endif
 #endif /* _STM32G474XX_IT_HPP */

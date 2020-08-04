@@ -13,7 +13,7 @@
 #ifdef STM32G474xx
 #include "stm32g474xx.h"
 #endif
-#include <vector>
+#include "etl/vector.h"
 
 enum GPIO_Pin { P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15 };
 enum GPIO_Mode { Input = 0b00, Output = 0b01, Alternate = 0b10, Analog = 11 };
@@ -42,11 +42,7 @@ enum GPIO_AlternateFunction {
 
 class GPIO {
  public:
-  GPIO() {
-    while (1) {
-      __NOP();
-    }
-  }
+  GPIO() = delete;
   GPIO(GPIO_TypeDef* bank) : gpio(bank) {
     if (bank == GPIOA) {
       RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
@@ -97,8 +93,9 @@ extern GPIO GPIO_C;
 
 struct GPIO_Pin_Config {
   GPIO_Pin_Config() = default;
-  GPIO_Pin_Config(GPIO& bank, const std::vector<GPIO_Pin>& pin_nums) : m_bank(bank), m_pin_nums(pin_nums) {}
-  GPIO_Pin_Config(const std::vector<GPIO_Pin>& pin_nums) : m_pin_nums(pin_nums) {}
+  GPIO_Pin_Config(GPIO& bank, const etl::vector<GPIO_Pin, 16>& pin_nums)
+      : m_bank(bank), m_pin_nums(pin_nums) {}
+  GPIO_Pin_Config(const etl::vector<GPIO_Pin, 16>& pin_nums) : m_pin_nums(pin_nums) {}
 
   GPIO_Mode Mode = Analog;
   GPIO_OutputType OutputType = PushPull;
@@ -108,7 +105,7 @@ struct GPIO_Pin_Config {
 
  private:
   GPIO& m_bank = GPIO_A;
-  std::vector<GPIO_Pin> m_pin_nums;
+  etl::vector<GPIO_Pin, 16> m_pin_nums;
 
  public:
   void configure(void) {
@@ -116,7 +113,7 @@ struct GPIO_Pin_Config {
       m_bank.set_pin_config(pin, Mode, OutputType, OutputSpeed, PullUpPullDown, AlternateFunction);
     }
   }
-  void configure_bank(GPIO& bank, const std::vector<GPIO_Pin>& pin_nums) {
+  void configure_bank(GPIO& bank, const etl::vector<GPIO_Pin, 16>& pin_nums) {
     m_pin_nums = pin_nums;
     m_bank = bank;
     configure();

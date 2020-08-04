@@ -12,6 +12,7 @@
 /* -------------------------------- includes -------------------------------- */
 #define MAX_INTERRUPTS 118
 #include "stm32g4xx.h"
+namespace stmlibxx {
 class Interrupt_Base {
  public:
   // Constructor
@@ -129,7 +130,6 @@ class Interrupt_Base {
   static Interrupt_Base* ISRVectorTable[MAX_INTERRUPTS - NVIC_USER_IRQ_OFFSET];
 };
 
-#if 1
 template <class owner_t, IRQn_Type intnmbr>
 class Interrupt : public Interrupt_Base {
  public:
@@ -140,5 +140,5 @@ class Interrupt : public Interrupt_Base {
  private:
   owner_t& Owner = static_cast<owner_t&>(*this);
 };
-#endif
+}  // namespace stmlibxx
 #endif /* _STM32G474XX_IT_HPP */

@@ -39,7 +39,7 @@ enum GPIO_AlternateFunction {
   AF14 = 0b1110,
   AF15 = 0b1111
 };
-
+namespace stmlibxx {
 class GPIO {
  public:
   GPIO() = delete;
@@ -85,12 +85,14 @@ class GPIO {
  protected:
   GPIO_TypeDef* gpio = nullptr;
 };
+}  // namespace stmlibxx
 
 // declare GPIO Banks
-extern GPIO GPIO_A;
-extern GPIO GPIO_B;
-extern GPIO GPIO_C;
+extern stmlibxx::GPIO GPIO_A;
+extern stmlibxx::GPIO GPIO_B;
+extern stmlibxx::GPIO GPIO_C;
 
+namespace stmlibxx {
 struct GPIO_Pin_Config {
   GPIO_Pin_Config() = default;
   GPIO_Pin_Config(GPIO& bank, const etl::vector<GPIO_Pin, 16>& pin_nums)
@@ -119,5 +121,6 @@ struct GPIO_Pin_Config {
     configure();
   }
 };
+}  // namespace stmlibxx
 
 #endif /* _GPIO_HPP */

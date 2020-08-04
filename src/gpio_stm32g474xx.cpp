@@ -11,12 +11,13 @@
 /* -------------------------------- includes -------------------------------- */
 #include <cstdarg>
 
-#include "gpio.hpp"
+#include "stmlibxx/gpio.hpp"
 
 // initialize GPIO
-GPIO GPIO_A(GPIOA);
-GPIO GPIO_B(GPIOB);
-GPIO GPIO_C(GPIOC);
+stmlibxx::GPIO GPIO_A(GPIOA);
+stmlibxx::GPIO GPIO_B(GPIOB);
+stmlibxx::GPIO GPIO_C(GPIOC);
+namespace stmlibxx {
 
 GPIO_State GPIO::read_pin(const GPIO_Pin& pin_num) {
   // read IDR Register
@@ -68,3 +69,4 @@ void GPIO::pin_config_impl(const GPIO_Pin& pin_num, const GPIO_AlternateFunction
     gpio->AFR[1] |= af << offset2;
   }
 }
+}  // namespace stmlibxx

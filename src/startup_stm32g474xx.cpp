@@ -12,7 +12,8 @@
 #include <algorithm>
 #include <cstdint>
 
-#include "stm32g474xx_it.hpp"
+#include "stmlibxx/interrupt.hpp"
+
 #define DEFINE_DEFAULT_ISR(name)                                                                      \
   extern "C" __attribute__((interrupt)) __attribute__((weak)) __attribute__((noreturn)) void name() { \
     while (true)                                                                                      \
@@ -132,6 +133,7 @@ DEFINE_DEFAULT_ISR(FMAC_IRQHandler)
 extern std::uint32_t _estack;
 extern "C" void Reset_Handler();
 
+namespace stmlibxx {
 std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     // Stack Ptr initialization
     reinterpret_cast<std::uintptr_t>(&_estack),
@@ -160,7 +162,7 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
      */
     reinterpret_cast<std::uintptr_t>(SysTick_Handler), /* SysTick_Handler */
 
-    reinterpret_cast<std::uintptr_t>(Interrupt_Base::WWDG_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(stmlibxx::Interrupt_Base::WWDG_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::PVD_PVM_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::RTC_TAMP_LSECSS_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::RTC_WKUP_IRQHandler),
@@ -264,7 +266,7 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::FMAC_IRQHandler)};
 
 Interrupt_Base *Interrupt_Base::ISRVectorTable[];
-
+}  // namespace stmlibxx
 extern "C" void Reset_Handler() {
   // Initialize data section
   extern std::uint8_t _sdata;

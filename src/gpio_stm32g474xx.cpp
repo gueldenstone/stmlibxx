@@ -21,7 +21,7 @@ namespace stmlibxx {
 
 GPIO_State GPIO::read_pin(const GPIO_Pin& pin_num) {
   // read IDR Register
-  return (GPIO_State)((gpio->IDR & pin_num) >> pin_num);
+  return (GPIO_State)((gpio->IDR & 1 << pin_num) >> pin_num);
 }
 
 void GPIO::pin_on(const GPIO_Pin& pin_num) {

@@ -14,10 +14,12 @@
 
 #include "stmlibxx/interrupt.hpp"
 
-#define DEFINE_DEFAULT_ISR(name)                                                                      \
-  extern "C" __attribute__((interrupt)) __attribute__((weak)) __attribute__((noreturn)) void name() { \
-    while (true)                                                                                      \
-      ;                                                                                               \
+#define DEFINE_DEFAULT_ISR(name)                                               \
+  extern "C" __attribute__((interrupt)) __attribute__((weak))                  \
+  __attribute__((noreturn)) void                                               \
+  name() {                                                                     \
+    while (true)                                                               \
+      ;                                                                        \
   }
 DEFINE_DEFAULT_ISR(defaultISR)
 DEFINE_DEFAULT_ISR(NMI_Handler)
@@ -143,9 +145,9 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(NMI_Handler),
     /* NMI_Handler
      */
-    reinterpret_cast<std::uintptr_t>(HardFault_Handler),  /* HardFault_Handler */
-    reinterpret_cast<std::uintptr_t>(MemManage_Handler),  /* MemManage_Handler */
-    reinterpret_cast<std::uintptr_t>(BusFault_Handler),   /* BusFault_Handler */
+    reinterpret_cast<std::uintptr_t>(HardFault_Handler), /* HardFault_Handler */
+    reinterpret_cast<std::uintptr_t>(MemManage_Handler), /* MemManage_Handler */
+    reinterpret_cast<std::uintptr_t>(BusFault_Handler),  /* BusFault_Handler */
     reinterpret_cast<std::uintptr_t>(UsageFault_Handler), /* UsageFault_Handler
                                                            */
     reinterpret_cast<std::uintptr_t>(nullptr),            /* 0 */
@@ -164,7 +166,8 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
 
     reinterpret_cast<std::uintptr_t>(stmlibxx::Interrupt_Base::WWDG_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::PVD_PVM_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt_Base::RTC_TAMP_LSECSS_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(
+        Interrupt_Base::RTC_TAMP_LSECSS_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::RTC_WKUP_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::FLASH_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::RCC_IRQHandler),
@@ -188,7 +191,8 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::EXTI9_5_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::TIM1_BRK_TIM15_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::TIM1_UP_TIM16_IRQHandler),
-    reinterpret_cast<std::uintptr_t>(Interrupt_Base::TIM1_TRG_COM_TIM17_IRQHandler),
+    reinterpret_cast<std::uintptr_t>(
+        Interrupt_Base::TIM1_TRG_COM_TIM17_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::TIM1_CC_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::TIM2_IRQHandler),
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::TIM3_IRQHandler),
@@ -266,7 +270,7 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(Interrupt_Base::FMAC_IRQHandler)};
 
 Interrupt_Base *Interrupt_Base::ISRVectorTable[];
-}  // namespace stmlibxx
+} // namespace stmlibxx
 extern "C" void Reset_Handler() {
   // Initialize data section
   extern std::uint8_t _sdata;

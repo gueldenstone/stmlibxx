@@ -9,15 +9,15 @@
 #ifndef _ISR_HPP
 #define _ISR_HPP
 
-#define MAX_INTERRUPTS 98  // 97 + "0" 
+#define MAX_INTERRUPTS 98 // 97 + "0"
 #include "stm32f3xx.h"
 
 class Interrupt {
- public:
+public:
   // Constructor
   Interrupt();
   // Register function
-  static void Register(IRQn_Type interrupt_number, Interrupt* intThisPtr);
+  static void Register(IRQn_Type interrupt_number, Interrupt *intThisPtr);
   // ISR functions
   static void __attribute__((weak)) WWDG_IRQHandler(void);
   static void __attribute__((weak)) PVD_IRQHandler(void);
@@ -88,7 +88,7 @@ class Interrupt {
 
   virtual void ISR(void) = 0;
 
- private:
-  static Interrupt* ISRVectorTable[MAX_INTERRUPTS - NVIC_USER_IRQ_OFFSET];
+private:
+  static Interrupt *ISRVectorTable[MAX_INTERRUPTS - NVIC_USER_IRQ_OFFSET];
 };
 #endif /* _ISR_HPP */

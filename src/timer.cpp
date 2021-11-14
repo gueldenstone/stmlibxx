@@ -19,7 +19,7 @@
 Timer::Timer(void) { InterruptPtr = new TimerInterrupt(this); }
 
 // Default Constructor for TimerInterrupt class
-TimerInterrupt::TimerInterrupt(Timer* owner) {
+TimerInterrupt::TimerInterrupt(Timer *owner) {
   InterruptOwnerPtr = owner;
   // Allows interrupt to access owner's data
   Interrupt::Register(TIM7_IRQn, this);

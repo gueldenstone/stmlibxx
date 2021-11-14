@@ -13,12 +13,12 @@
 #include <cstdint>
 
 #include "stm32g441_it.hpp"
-#define DEFINE_DEFAULT_ISR(name)                              \
-  extern "C" __attribute__((interrupt)) __attribute__((weak)) \
-      __attribute__((noreturn)) void                          \
-      name() {                                                \
-    while (true)                                              \
-      ;                                                       \
+#define DEFINE_DEFAULT_ISR(name)                                               \
+  extern "C" __attribute__((interrupt)) __attribute__((weak))                  \
+  __attribute__((noreturn)) void                                               \
+  name() {                                                                     \
+    while (true)                                                               \
+      ;                                                                        \
   }
 DEFINE_DEFAULT_ISR(defaultISR)
 DEFINE_DEFAULT_ISR(NMI_Handler)

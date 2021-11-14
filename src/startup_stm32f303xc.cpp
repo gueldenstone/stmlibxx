@@ -13,10 +13,12 @@
 #include <cstdint>
 
 #include "stm32f303xc_it.hpp"
-#define DEFINE_DEFAULT_ISR(name)                                                                      \
-  extern "C" __attribute__((interrupt)) __attribute__((weak)) __attribute__((noreturn)) void name() { \
-    while (true)                                                                                      \
-      ;                                                                                               \
+#define DEFINE_DEFAULT_ISR(name)                                               \
+  extern "C" __attribute__((interrupt)) __attribute__((weak))                  \
+  __attribute__((noreturn)) void                                               \
+  name() {                                                                     \
+    while (true)                                                               \
+      ;                                                                        \
   }
 
 DEFINE_DEFAULT_ISR(defaultISR)
@@ -108,9 +110,9 @@ std::uintptr_t g_pfnVectors[] __attribute__((section(".isr_vector"))){
     reinterpret_cast<std::uintptr_t>(NMI_Handler),
     /* NMI_Handler
      */
-    reinterpret_cast<std::uintptr_t>(HardFault_Handler),  /* HardFault_Handler */
-    reinterpret_cast<std::uintptr_t>(MemManage_Handler),  /* MemManage_Handler */
-    reinterpret_cast<std::uintptr_t>(BusFault_Handler),   /* BusFault_Handler */
+    reinterpret_cast<std::uintptr_t>(HardFault_Handler), /* HardFault_Handler */
+    reinterpret_cast<std::uintptr_t>(MemManage_Handler), /* MemManage_Handler */
+    reinterpret_cast<std::uintptr_t>(BusFault_Handler),  /* BusFault_Handler */
     reinterpret_cast<std::uintptr_t>(UsageFault_Handler), /* UsageFault_Handler
                                                            */
     reinterpret_cast<std::uintptr_t>(nullptr),            /* 0 */

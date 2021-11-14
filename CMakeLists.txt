@@ -6,8 +6,8 @@ project(stmlibxx
 add_library(${PROJECT_NAME} INTERFACE)
 target_sources(${PROJECT_NAME}
     INTERFACE
-        stm32f303xc_it.cpp
-        startup_stm32f303xc.cpp
+        src/gpio_stm32g474xx.cpp
+        src/startup_stm32g474xx.cpp
         syscalls.c
 )
 target_include_directories(${PROJECT_NAME} INTERFACE

@@ -8,7 +8,7 @@ target_sources(${PROJECT_NAME}
     INTERFACE
         src/gpio_stm32g474xx.cpp
         src/startup_stm32g474xx.cpp
-        syscalls.c
+        src/syscalls.c
 )
 target_include_directories(${PROJECT_NAME} INTERFACE
     ${CMAKE_CURRENT_LIST_DIR}/include

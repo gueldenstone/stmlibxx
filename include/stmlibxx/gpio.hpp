@@ -15,32 +15,10 @@
 #endif
 #include "etl/vector.h"
 
-enum GPIO_Pin {
-  P0,
-  P1,
-  P2,
-  P3,
-  P4,
-  P5,
-  P6,
-  P7,
-  P8,
-  P9,
-  P10,
-  P11,
-  P12,
-  P13,
-  P14,
-  P15
-};
+enum GPIO_Pin { P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15 };
 enum GPIO_Mode { Input = 0b00, Output = 0b01, Alternate = 0b10, Analog = 11 };
 enum GPIO_OutputType { PushPull = 0b0, OpenDrain = 0b1 };
-enum GPIO_Speed {
-  LowSpeed = 0b00,
-  MediumSpeed = 0b01,
-  HighSpeed = 0b10,
-  VeryHighSpeed = 0b11
-};
+enum GPIO_Speed { LowSpeed = 0b00, MediumSpeed = 0b01, HighSpeed = 0b10, VeryHighSpeed = 0b11 };
 enum GPIO_PullUpDown { noPUPD = 0b00, PullUp = 0b01, PullDown = 0b10 };
 enum GPIO_State { Off = 0, On = 1 };
 enum GPIO_AlternateFunction {
@@ -67,19 +45,19 @@ public:
   GPIO() = delete;
   GPIO(GPIO_TypeDef *bank) : gpio(bank) {
     if (bank == GPIOA) {
-      RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+      RCC->AHB2ENR = RCC->AHB2ENR | RCC_AHB2ENR_GPIOAEN;
     } else if (bank == GPIOB) {
-      RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
+      RCC->AHB2ENR = RCC->AHB2ENR | RCC_AHB2ENR_GPIOBEN;
     } else if (bank == GPIOC) {
-      RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN;
+      RCC->AHB2ENR = RCC->AHB2ENR | RCC_AHB2ENR_GPIOCEN;
     } else if (bank == GPIOD) {
-      RCC->AHB2ENR |= RCC_AHB2ENR_GPIODEN;
+      RCC->AHB2ENR = RCC->AHB2ENR | RCC_AHB2ENR_GPIODEN;
     } else if (bank == GPIOE) {
-      RCC->AHB2ENR |= RCC_AHB2ENR_GPIOEEN;
+      RCC->AHB2ENR = RCC->AHB2ENR | RCC_AHB2ENR_GPIOEEN;
     } else if (bank == GPIOF) {
-      RCC->AHB2ENR |= RCC_AHB2ENR_GPIOFEN;
+      RCC->AHB2ENR = RCC->AHB2ENR | RCC_AHB2ENR_GPIOFEN;
     } else if (bank == GPIOG) {
-      RCC->AHB2ENR |= RCC_AHB2ENR_GPIOGEN;
+      RCC->AHB2ENR = RCC->AHB2ENR | RCC_AHB2ENR_GPIOGEN;
     }
   }
   ~GPIO() = default;
@@ -94,8 +72,7 @@ private:
   void pin_config_impl(const GPIO_Pin &pin_num, const GPIO_OutputType &otype);
   void pin_config_impl(const GPIO_Pin &pin_num, const GPIO_Speed &ospeed);
   void pin_config_impl(const GPIO_Pin &pin_num, const GPIO_PullUpDown &pupd);
-  void pin_config_impl(const GPIO_Pin &pin_num,
-                       const GPIO_AlternateFunction &af);
+  void pin_config_impl(const GPIO_Pin &pin_num, const GPIO_AlternateFunction &af);
 
 public:
   //  variadic template function which iterates over all given configs
@@ -120,8 +97,7 @@ struct GPIO_Pin_Config {
   GPIO_Pin_Config() = default;
   GPIO_Pin_Config(GPIO &bank, const etl::vector<GPIO_Pin, 16> &pin_nums)
       : m_bank(bank), m_pin_nums(pin_nums) {}
-  GPIO_Pin_Config(const etl::vector<GPIO_Pin, 16> &pin_nums)
-      : m_pin_nums(pin_nums) {}
+  GPIO_Pin_Config(const etl::vector<GPIO_Pin, 16> &pin_nums) : m_pin_nums(pin_nums) {}
 
   GPIO_Mode Mode = Analog;
   GPIO_OutputType OutputType = PushPull;
@@ -136,8 +112,7 @@ private:
 public:
   void configure(void) {
     for (auto &&pin : m_pin_nums) {
-      m_bank.set_pin_config(pin, Mode, OutputType, OutputSpeed, PullUpPullDown,
-                            AlternateFunction);
+      m_bank.set_pin_config(pin, Mode, OutputType, OutputSpeed, PullUpPullDown, AlternateFunction);
     }
   }
   void configure_bank(GPIO &bank, const etl::vector<GPIO_Pin, 16> &pin_nums) {
